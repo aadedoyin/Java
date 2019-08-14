@@ -1,0 +1,18 @@
+public class Magic {
+  /*
+  In this project, you will become a mathemagician and write a small program that performs a mathematical magic trick! It will involve performing arithmetic operations on an integer that you choose. Everything should equal 3!
+  */
+	public static void main(String[] args) {
+
+		int myNumber = 500;
+    int stepOne = myNumber * myNumber, stepTwo = stepOne + myNumber, stepThree = stepTwo / myNumber, stepFour = stepThree + 17, stepFive = stepFour - myNumber, stepSix = stepFive / 6;
+    
+    System.out.println(stepOne);
+    System.out.println(stepTwo);
+    System.out.println(stepThree);
+    System.out.println(stepFour);
+    System.out.println(stepFive);
+    System.out.println(stepSix);
+
+	}
+}
