@@ -1,0 +1,219 @@
+/*
+Anthony A.
+
+Write a Java program to play the game: 100!
+
+1) There is one deck of 100 cards. Each has a value 1-10.
+    a. Must use random # method and build the stack using push() method
+    b. If the deck ever gets empty, this process is repeated.
+
+2) There must be two players.
+
+3) Each player draws a card off the top of the deck.
+
+4) List of the #'s and what happens:
+    1 - minus 10 points, turn is over
+    2 - 6 gets the points for # drawn, but turn is over
+    7 gets the 7 points and draws again
+    8 - 10 gets the points for # drawn, but turn is over
+
+5) First player to 100 wins! (Add another 100 cards, if the deck of cards run out)
+ */
+import org.jetbrains.annotations.NotNull;
+import java.util.Random;
+
+public class Project5 {
+    public static void main(String[] args) {
+
+        Stack deck = new Stack();
+        Player player1 = new Player(1);
+        Player player2 = new Player(2);
+        deck.playGame(player1, player2);
+    }
+}
+
+class Node {
+
+    int data; // integer data
+    Node next;
+}
+// ******** Stack Class ********
+
+class Stack {
+    Node stackTop;
+
+    // ******** default constructor ********
+
+    // Constructor
+    Stack() {
+        this.stackTop = null;
+    }
+
+// ******** isEmpty ********
+
+    // Utility function to check if the stack is empty or not
+    public boolean isEmpty() {
+        return (stackTop == null);
+    }
+
+// ******** isFull ********
+
+    // Utility function to check if the stack is full or not
+    public boolean isFull() {
+        return false;
+    }
+
+// ******** push  ********
+
+    public void push(int x) // insert at the beginning
+    {
+        if (!this.isFull()) {
+            Node node = new Node();
+            node.data = x;
+            node.next = stackTop;
+            stackTop = node;
+        } else
+            System.out.println("Stack is Full");
+    } // end of push(()
+
+// ******** top ********
+
+    // Utility function to return top element in a stack
+    public int top() {
+        // check for empty stack
+        if (!isEmpty()) {
+            return stackTop.data;
+        } else {
+            System.out.println("Stack is empty");
+            return -1;
+        }
+    }  // end of top()
+
+// ******** pop ********
+
+    // Utility function to pop top element from the stack
+    public void pop() // remove at the beginning
+    {
+        // check for stack underflow
+        if (!this.isEmpty())
+            stackTop = stackTop.next;
+        else
+            System.out.print("** Can not POP an empty stack ** ");
+    }
+
+    //Method that creates the deck for the game
+    public void loadDeck() {
+        Random randomNum = new Random();
+        for (int i = 0; i < 100; i++) {
+            int random = randomNum.nextInt(10) + 1;
+            this.push(random);
+        }
+        System.out.println("Deck is set with 100 Cards!");
+    }
+
+    //Method that reloadsDeck if deck equals zero
+    public void reloadDeck() {
+        loadDeck();
+    }
+
+    //Method that goes through the rules of the game
+    public void playGame(@NotNull Player player1, Player player2) {
+        System.out.println("Start Game,");
+        loadDeck();
+        int cardNum = 100;
+
+        //creates current player and sets it to player 1
+        Player currPlayer = player1;
+
+        //loops until one player has a score above 100 or cardNum is less than 0.
+        while (player1.score < 100 && player2.score < 100 && cardNum > 0) {
+            player1.displayPlayerInfo();
+            player2.displayPlayerInfo();
+            System.out.println("***************");
+
+            System.out.println("Player "+currPlayer.playerId+" turn");
+            if (this.top() == 1) { //statement that subtracts 10 from the card 1
+                currPlayer.score -= 10;
+                System.out.println("Player "+currPlayer.playerId+" draws a " + this.top() + ", losses 10 points");
+                this.pop();
+            } else if (this.top() >= 2 && this.top() <= 6) { //statement that adds points from 2-6
+                currPlayer.score += this.top();
+                System.out.println("Player "+currPlayer.playerId+" draws a " + this.top());
+                this.pop();
+            } else if (this.top() >= 8 && this.top() <= 10) { //statement that adds points from 8-10
+                currPlayer.score += this.top();
+                System.out.println("Player "+currPlayer.playerId+" draws a " + this.top());
+                this.pop();
+            } else { //state that adds 7 points and runs drawAgain method
+                currPlayer.score += 7;
+                System.out.println("Player "+currPlayer.playerId+" draws a 7");
+                this.pop();
+                cardNum -= 1;
+                System.out.println("Cards left in deck " + (cardNum));
+                drawAgain(currPlayer, cardNum);
+            }
+            cardNum -= 1;
+            System.out.println("Cards left in deck " + (cardNum));
+            System.out.println("End of Player "+currPlayer.playerId+" turn");
+            System.out.println("***************");
+
+            if (currPlayer.playerId == 1) {
+                currPlayer = player2;
+            }
+            else {
+                currPlayer = player1;
+            }
+        }
+        winner(player1); //checks which player wins the game
+        if (isEmpty()) { //if card cardNum reaches 0, the deck is empty and add cards to the deck
+            reloadDeck();
+            System.out.println("Deck has been reloaded!");
+            cardNum += 100;
+        }
+    }
+
+    //Method that runs if card drawn is a 7. Allows user to draw again from the deck.
+    public void drawAgain(Player player, int cardNum){
+        if (this.top() == 1) {
+            player.score -= 10;
+            cardNum -= 1;
+            System.out.println("Player " + player.playerId + " draws a " + this.top() + ", losses 10 points");
+        }
+        else if(this.top() == 7){ //repeats method if 7 is drawn
+            System.out.println("Player " + player.playerId + " draws a " + this.top());
+            player.score += this.top();
+            cardNum -= 1;
+            this.pop();
+            drawAgain(player, cardNum);
+        }
+        else {
+            System.out.println("Player " + player.playerId + " draws a " + this.top());
+            player.score += this.top();
+            cardNum -= 1;
+        }
+        this.pop();
+    }
+
+    //Method to determine winner of the game
+    public void winner(@NotNull Player player1){
+        if(player1.score >= 100)
+            System.out.println("Player 1 Wins");
+        else
+            System.out.println("Player 2 Wins");
+    }
+}
+
+//Player Class to hold Score are playerID.
+    class Player {
+        int score;
+        int playerId;
+
+        Player(int playerId) {
+            this.score = 0;
+            this.playerId = playerId;
+        }
+        //Method to display player ID and score
+        public void displayPlayerInfo() {
+            System.out.println("Player " + playerId + " - " + this.score);
+        }
+    }
