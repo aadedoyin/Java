@@ -1,0 +1,126 @@
+/*
+Allow the user to enter 10 integers from the keyboard
+    o Store odd # in oddStack
+    o Store even # in evenStack
+    o Traverse and display the oddStack in LIFO
+    o Traverse and display the evenStack in LIFO
+ */
+import java.util.Scanner;
+public class Lab8 {
+    public static void main(String[] args)
+    {
+        // create Object of Implementing class
+        StackType oddStack = new StackType();
+        StackType evenStack = new StackType();
+
+        Scanner sc = new Scanner(System.in);
+        int x;
+
+        for(int i = 0; i < 10; i++){
+            System.out.println("Enter integer #" + (i+1) + ": ");
+            x = sc.nextInt();
+            if( x%2 == 0){
+                evenStack.push(x);
+            }
+            else
+                oddStack.push(x);
+        }
+
+        // display Stack elements
+        System.out.println("The integers in the odd stack: ");
+        while (!oddStack.isEmpty())
+        {
+            System.out.print(oddStack.top());
+            oddStack.pop();
+            System.out.println();
+        }
+
+        System.out.println("The integers in the even stack: ");
+        while (!evenStack.isEmpty())
+        {
+            System.out.print(evenStack.top());
+            evenStack.pop();
+            System.out.println();
+        }
+
+    } // end of main
+}
+
+// A linked list node
+class node {
+
+    int data; // integer data
+    node next;
+}
+
+// ******** Stack Class ********
+
+class StackType{
+    node stackTop;
+
+    // ******** default constructor ********
+
+    // Constructor
+    StackType()
+    {
+        this.stackTop = null;
+    }
+
+// ******** isEmpty ********
+
+    // Utility function to check if the stack is empty or not
+    public boolean isEmpty()
+    {
+        return (stackTop == null);
+    }
+
+// ******** isFull ********
+
+    // Utility function to check if the stack is full or not
+    public boolean isFull()
+    {
+        return false;
+    }
+
+// ******** push  ********
+
+    public void push(int x) // insert at the beginning
+    {
+        if (!this.isFull())
+        {
+            node node = new node();
+            node.data = x;
+            node.next = stackTop;
+            stackTop = node;
+        }
+        else
+            System.out.println("Stack is Full");
+    } // end of push(()
+
+// ******** top ********
+
+    // Utility function to return top element in a stack
+    public int top()
+    {
+        // check for empty stack
+        if (!isEmpty()) {
+            return stackTop.data;
+        }
+        else {
+            System.out.println("Stack is empty");
+            return -1;
+        }
+    }  // end of top()
+
+// ******** pop ********
+
+    // Utility function to pop top element from the stack
+    public void pop() // remove at the beginning
+    {
+        // check for stack underflow
+        if (!this.isEmpty())
+            stackTop = stackTop.next;
+        else
+            System.out.print("** Can not POP an empty stack ** ");
+    }
+} // end of class StackType
