@@ -1,0 +1,248 @@
+/*
+Anthony A
+
+Write the Java program that loads 5 random integers (ranging 1 to 100) into
+a queue and 5 random integers (ranging 1 to 100) into a stack.
+
+Lastly, your program will traverse through the stack and queue, one at a time,
+comparing stackTop with queueFront. Each time your program must log which
+value was highest, before moving on to the next element in the stack/queue.
+ */
+import java.util.Random;
+
+public class Lab9 {
+    public static void main(String[] args) {
+        //declare a stack and a queue
+        Queue queue = new Queue();
+        Stacks stack = new Stacks();
+
+        loadQueue(queue); //method uses for loop & random to add 5 ints
+        displayQueue(queue);
+
+        loadStack(stack); //method uses for loop & random to push 5 ints
+        displayStack(stack);
+
+        comparison(stack, queue);
+    } //end of main
+
+    public static void loadQueue(Queue queue){
+        Random randomNum = new Random();
+        for(int i = 0; i < 5; i++){
+            int random = randomNum.nextInt(100) + 1;
+            queue.addQueue(random);
+        }
+    }
+
+    public static void displayQueue(Queue queue){
+        System.out.println("******************");
+        System.out.println();
+        queue.displayQueue();
+        System.out.print("End of Queue");
+        System.out.println();
+        System.out.println("******************");
+    }
+
+    public static void loadStack(Stacks stack){
+        Random randomNum = new Random();
+        for(int i = 0; i < 5; i++){
+            int random = randomNum.nextInt(100) + 1;
+            stack.push(random);
+        }
+    }
+
+    public static void displayStack(Stacks stack){
+        System.out.println();
+        System.out.println("StackTop");
+        stack.displayStack();
+        System.out.println("End of Stack");
+    }
+
+    public static void comparison(Stacks stack, Queue queue){
+        int countStack = 0, countQueue = 0;
+        while (!stack.isEmpty() && !queue.isEmptyQueue())
+        {
+            if(stack.stackTop.data > queue.queueFront.data) {
+                countStack++;
+                System.out.println("Stack current top " + stack.top() +" is >= Queue current front " + queue.front());
+            }
+            else{
+                countQueue++;
+                System.out.println("Queue current front " + queue.front() +" is >= Stack current top " + stack.top());
+            }
+            stack.pop();
+            queue.deleteQueue();
+        }
+        if(countStack > countQueue)
+            System.out.println("Stack won the Head-2-Head battles.");
+        else
+            System.out.println("Queue won the Head-2-Head battles.");
+        System.out.println("Stacks " + countStack);
+        System.out.println("Queues " + countQueue);
+    }
+} //end of class Lab9
+
+// A linked list node
+class Nodes {
+
+    int data; // integer data
+    Nodes next;
+}
+
+// ******** Queue Class ********
+class Queues{
+    Nodes queueFront;
+    Nodes queueRear;
+
+    // ******** default constructor ********
+
+    Queues()     // Constructor
+    {
+        this.queueFront = null;
+        this.queueRear = null;
+    }
+
+// ******** isEmpty ********
+
+    public boolean isEmptyQueue()     // Utility method to check if the queue is empty or not
+    {
+        return (queueFront == null);
+    }
+
+// ******** addQueue  ********
+
+    public void addQueue(int x) // insert at the back of the queue
+    {
+        Nodes node = new Nodes();
+        node.data = x;
+        node.next = null;
+
+        if (isEmptyQueue())
+        {
+            this.queueFront = node;
+        }
+        else
+        {
+            this.queueRear.next = node;
+        }
+        this.queueRear = node;
+    } // end of addQueue()
+
+// ******** front ********
+
+    public int front()     // Utility method to return front element in a queue
+    {
+        // check for empty Queue
+        if (!isEmptyQueue()) {
+            return queueFront.data;
+        }
+        else {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+    }  // end of front()
+
+// ******** deleteQueue ********
+
+    // Utility method to remove element from front of the Queue
+    public void deleteQueue() // remove from the beginning
+    {
+        // check for queue underflow
+        if (!this.isEmptyQueue())
+            this.queueFront = this.queueFront.next;
+        else
+            System.out.print("** Can not deleteQueue an empty queue ** ");
+
+        if (this.queueFront == null)
+            this.queueRear = null;
+    }
+
+    // ******** displayQueue ********
+
+    //Utility method to display elements starting from the front of the Queue
+    public void displayQueue() {
+        Nodes node = queueFront;
+        while (node != null) {
+            System.out.print(node.data + " <-- ");
+            node = node.next;
+        }
+    } // end of displayQueue method
+} // end of class QueueType
+
+// ******** Stack Class ********
+
+class Stacks{
+    Nodes stackTop;
+
+    // ******** default constructor ********
+
+    Stacks()    // Constructor
+    {
+        this.stackTop = null;
+    }
+
+// ******** isEmpty ********
+
+    public boolean isEmpty()     // Utility function to check if the stack is empty or not
+    {
+        return (stackTop == null);
+    }
+
+// ******** isFull ********
+
+    public boolean isFull()     // Utility function to check if the stack is full or not
+    {
+        return false;
+    }
+
+// ******** push  ********
+
+    public void push(int x) // insert at the beginning
+    {
+        if (!this.isFull())
+        {
+            Nodes node = new Nodes();
+            node.data = x;
+            node.next = stackTop;
+            stackTop = node;
+        }
+        else
+            System.out.println("Stack is Full");
+    } // end of push(()
+
+// ******** top ********
+
+    public int top()     // Utility function to return top element in a stack
+    {
+        // check for empty stack
+        if (!isEmpty()) {
+            return stackTop.data;
+        }
+        else {
+            System.out.println("Stack is empty");
+            return -1;
+        }
+    }  // end of top()
+
+// ******** pop ********
+
+    // Utility function to pop top element from the stack
+    public void pop() // remove at the beginning
+    {
+        // check for stack underflow
+        if (!this.isEmpty())
+            stackTop = stackTop.next;
+        else
+            System.out.print("** Can not POP an empty stack ** ");
+    }
+
+    // ******** displayStack ********
+
+    //Utility to display Stack starting from the top
+    public void displayStack() {
+        Nodes node = stackTop;
+        while (node != null) {
+            System.out.println(node.data);
+            node = node.next;
+        }
+    } // end of displayStack method
+} // end of class StackType
