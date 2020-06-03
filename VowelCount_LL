@@ -1,0 +1,64 @@
+/*
+Lab 7 by Anthony Adedoyin
+Write a Java program to store a Linked List of characters.
+1. insert - method for character to the Linked List
+2. vowelCount - value returning method that returns the # of vowels in Linked List
+3. Main:
+    declares a linked list
+    loops 5 times to insert 5 characters
+    have a S.O.P. which has a method call to vowelCount
+ */
+import java.util.Scanner;
+import static java.lang.Character.toLowerCase;
+public class Lab7 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in); //Scanner for user input
+        LinkList2.linkedlist list = new LinkList2.linkedlist(); //creates a linked list
+
+        for(int i = 0; i < 5; i++){ //loop to ask user to add 5 characters
+            System.out.println("Enter Character #"+(i+1)+" into list"); //Asks user to type in character into list
+            char c = sc.next().charAt(0); // takes user input at first position and saves it in variable c
+            c = toLowerCase(c); // turns capital letter, if user types in a capital letter, to lowercase
+            list.insert(c); //inserts value of c to list
+        }
+
+        System.out.println("Number of vowels in the list is: "+ vowelCount(list)); // prints number of vowels in list
+    }//end of main method
+
+    public static int vowelCount(LinkList2.linkedlist list){
+        int count = 0; //counter
+        char[] array = {'a','e','i','o','u'}; //array of vowels
+        LinkList2.Node node = list.first; //new node to use for traversal of list
+        while (node != null){ //while loop to check for null node
+            for (char c : array) { //for each loop to check array
+                if (node.data == c) //compares vowels in node to array
+                    count++;
+            }
+            node = node.next; //sets node to next node for while loop
+        }
+        return count; //returns count
+    }//end of vowelCount method
+}//end of Lab7 class
+
+class LinkList2{
+    static class Node{ //creates a node class that has data and pointer(next)
+        char data;
+        Node next;
+    }// end of node class
+
+    static class linkedlist{
+        Node first, last; //creates first and last node
+
+        public void insert(char data){
+            Node node = new Node(); //creates new node
+            node.data = data; //sets data in new node to what is being inserted
+            node.next = null; //sets next of the new node to null
+            if(first == null){ //if current list is empty sets first to new node
+                first = node;
+            }
+            else //will set last to point to new node if list is not empty
+                last.next = node;
+            last = node; //sets last to current node
+        }//end of insert method
+    }//end of linkedlist class
+}//end of LinkList2 class
