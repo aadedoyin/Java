@@ -1,0 +1,127 @@
+/*
+Anthony A.
+Design an Inventory class that can hold information and calculate data for item in a retail store's inventory.
+
+Demonstrate the class in a driver program. The drive program (.java) must make at least one function call
+to each member function.
+
+Input Validation: Do not accept negative values for item number, quantity, or cost.
+ */
+import java.util.Scanner;
+
+public class Project3 {
+    public static void main(String[] args) {
+
+        Inventory programmers = new Inventory();
+        Inventory chicken = new Inventory();
+        chicken.setItemNumber(100);
+        chicken.setCost(15.00);
+        chicken.setQuantity(50);
+
+
+        System.out.println("Enter the Item Number for programmers: ");
+        int itemNumber = (int) inputValidation();
+        System.out.println("Enter the Quantity for programmers: ");
+        int quantity = (int) inputValidation();
+        System.out.println("Enter the Cost for programmers: ");
+        double cost = inputValidation();
+
+        programmers.Inventory(itemNumber,quantity,cost);
+        chicken.Inventory(chicken.getItemNumber(), chicken.getQuantity(),chicken.getCost());
+
+        System.out.println("This is what we have for programmers: ");
+        System.out.println("Item #: "+programmers.getItemNumber());
+        System.out.println("Quantity: "+programmers.getQuantity());
+        System.out.println("$"+programmers.getCost());
+        System.out.println("$"+programmers.getTotalCost());
+
+        System.out.println("This is what we have for chicken: ");
+        System.out.println("Item #: "+chicken.getItemNumber());
+        System.out.println("Quantity: "+chicken.getQuantity());
+        System.out.println("$"+chicken.getCost());
+        System.out.println("$"+chicken.getTotalCost());
+    }
+
+    public static double inputValidation(){
+        Scanner sc = new Scanner(System.in);
+        double input = sc.nextDouble();
+        if(input < 0){
+            System.out.println("This is not a valid number, please enter a number above 0: ");
+            return inputValidation();
+        }
+        else
+            return input;
+    }
+}
+/*
+Inventory class that can hold information and calculate data for item in a retail store's inventory.
+This class should have the following private member variables
+This class should have the following public member methods
+ */
+class Inventory {
+    //Private member variables
+    private int itemNumber; //holds th item's item number
+    private int quantity; //holds the quantity of the items on-hand
+    private double cost; //holds the wholesale per-unit cost of the item
+    private double totalCost; //hold the total inventory cost of an item
+
+    //default constructor sets all variables to 0
+    public Inventory() {
+        this.itemNumber = 0;
+        this.quantity = 0;
+        this.cost = 0;
+        this.totalCost = 0;
+    }
+
+    /*
+    constructor #2 accepts itemNumber, cost, and quantity and copy values to appropriate member variables,
+    calls setTotalCost function
+     */
+    public void Inventory(int itemNumber, int quantity, double cost){
+        this.itemNumber = itemNumber;
+        this.quantity = quantity;
+        this.cost = cost;
+
+        setTotalCost(quantity,cost);
+    }
+
+    //setter for itemNumber
+    public void setItemNumber(int itemNumber){
+        this.itemNumber = itemNumber;
+    }
+
+    //setter for quantity
+    public void setQuantity(int quantity){
+        this.quantity = quantity;
+    }
+
+    //setter for cost
+    public void setCost(double cost){
+        this.cost = cost;
+    }
+
+    //method to calculate inventory cost and stores value as totalcost
+    public void setTotalCost(int quantity, double cost){
+        this.totalCost = quantity * cost;
+    }
+
+    //returns itemNumber
+    public int getItemNumber(){
+        return itemNumber;
+    }
+
+    //returns quantity
+    public int getQuantity(){
+        return quantity;
+    }
+
+    //returns cost
+    public double getCost(){
+        return cost;
+    }
+
+    //returns totalCost
+    public double getTotalCost(){
+        return totalCost;
+    }
+}
